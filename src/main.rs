@@ -21,7 +21,7 @@ const fn ray_trace() -> [(u8, u8, u8); PIXEL_COUNT] {
     let mut i = 0;
     let mut j = (IMAGE_HEIGHT - 1) as i32;
     // forが使えないのでwhileで代用
-    while 0 < j {
+    while 0 <= j {
         while i < IMAGE_WIDTH {
             let r = (i as f64) / ((IMAGE_WIDTH - 1) as f64);
             let g = j as f64 / (IMAGE_HEIGHT - 1) as f64;
