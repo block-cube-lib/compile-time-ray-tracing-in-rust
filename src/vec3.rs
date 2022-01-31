@@ -61,6 +61,22 @@ impl const IndexMut<usize> for Vec3 {
     }
 }
 
+impl const Add<Vec3> for Vec3 {
+    type Output = Self;
+
+    fn add(self, rhs: Vec3) -> Self::Output {
+        Vec3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
+    }
+}
+
+impl const Sub<Vec3> for Vec3 {
+    type Output = Self;
+
+    fn sub(self, rhs: Vec3) -> Self::Output {
+        Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
+    }
+}
+
 impl const Mul<f64> for Vec3 {
     type Output = Vec3;
 
@@ -184,6 +200,21 @@ mod test {
         v[1] = 2.0;
         v[2] = 3.0;
         assert_eq!((v[0], v[1], v[2]), (1.0, 2.0, 3.0));
+    }
+    #[test]
+    fn add() {
+        let v1: Vec3 = Vec3::new(1.0, 2.0, 3.0);
+        let v2: Vec3 = Vec3::new(2.1, 3.2, 4.3);
+        let v3 = v1 + v2;
+        assert_eq!((v3.x, v3.y, v3.z), (3.1, 5.2, 7.3));
+    }
+
+    #[test]
+    fn sub() {
+        let v1: Vec3 = Vec3::new(2.1, 3.2, 4.3);
+        let v2: Vec3 = Vec3::new(1.0, 2.1, 3.3);
+        let v3 = v1 - v2;
+        assert_eq!((v3.x, v3.y, v3.z), (1.1, 1.1, 1.0));
     }
 
     #[test]
