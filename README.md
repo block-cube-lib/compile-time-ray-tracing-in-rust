@@ -2,7 +2,7 @@
 Rustでコンパイル時レイトレーシングを行うリポジトリです。  
 コンパイル時にすべての計算を行い実行時には画像出力を行うだけです。  
 
-`const fn`の中で浮動小数点演算を行うためにnightlyビルドで`#![feature(const_fn_floating_point_arithmetic)]`を有効にしています。
+使用しているRustのバージョンはv1.60.0-nightlyです。
 
 ## レンダリング結果
 ![Image1](./output/image1.png)  
