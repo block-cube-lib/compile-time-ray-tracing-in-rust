@@ -14,7 +14,7 @@ impl Ray {
         }
     }
 
-    pub const fn origin(&self) -> Vec3 {
+    pub const fn origin(&self) -> Point3 {
         self.orig
     }
 
