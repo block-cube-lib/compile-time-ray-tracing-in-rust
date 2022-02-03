@@ -1,7 +1,7 @@
 use crate::util::*;
 use std::ops::*;
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Copy)]
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,
@@ -11,6 +11,24 @@ pub struct Vec3 {
 impl const std::default::Default for Vec3 {
     fn default() -> Self {
         Vec3::ZERO
+    }
+}
+
+impl const Clone for Vec3 {
+    fn clone(&self) -> Self {
+        Vec3 {
+            x: self.x,
+            y: self.y,
+            z: self.z,
+        }
+    }
+
+    fn clone_from(&mut self, source: &Self) {
+        *self = Vec3 {
+            x: source.x,
+            y: source.y,
+            z: source.z,
+        }
     }
 }
 
@@ -65,7 +83,11 @@ impl const Add<Vec3> for Vec3 {
     type Output = Self;
 
     fn add(self, rhs: Vec3) -> Self::Output {
-        Vec3::new(self.x + rhs.x, self.y + rhs.y, self.z + rhs.z)
+        Vec3 {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+        }
     }
 }
 
@@ -73,7 +95,11 @@ impl const Sub<Vec3> for Vec3 {
     type Output = Self;
 
     fn sub(self, rhs: Vec3) -> Self::Output {
-        Vec3::new(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
+        Vec3 {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z,
+        }
     }
 }
 
@@ -81,7 +107,11 @@ impl const Mul<f64> for Vec3 {
     type Output = Vec3;
 
     fn mul(self, rhs: f64) -> Self::Output {
-        Vec3::new(self.x * rhs, self.y * rhs, self.z * rhs)
+        Vec3 {
+            x: self.x * rhs,
+            y: self.y * rhs,
+            z: self.z * rhs,
+        }
     }
 }
 
@@ -95,7 +125,11 @@ impl const Div<f64> for Vec3 {
     type Output = Vec3;
 
     fn div(self, rhs: f64) -> Self::Output {
-        Vec3::new(self.x / rhs, self.y / rhs, self.z / rhs)
+        Vec3 {
+            x: self.x / rhs,
+            y: self.y / rhs,
+            z: self.z / rhs,
+        }
     }
 }
 
