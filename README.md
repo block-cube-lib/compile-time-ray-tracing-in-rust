@@ -7,3 +7,4 @@ Rustでコンパイル時レイトレーシングを行うリポジトリです�
 ## レンダリング結果
 ![Image1](./output/image1.png)  
 ![Image2](./output/image2.png)
+![Image3](./output/image3.png)
