@@ -14,7 +14,7 @@ const PIXEL_COUNT: usize = IMAGE_WIDTH * IMAGE_HEIGHT;
 
 const fn ray_color(ray: &Ray) -> Color {
     let unit_direction = unit_vector(&ray.direction());
-    let t = 0.5 * unit_direction.y + 1.0;
+    let t = 0.5 * (unit_direction.y + 1.0);
     (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0)
 }
 
