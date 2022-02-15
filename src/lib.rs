@@ -8,6 +8,7 @@ pub mod util;
 pub mod vec3;
 
 pub use ray::*;
+pub use util::*;
 pub use vec3::*;
 
 pub type Point3 = Vec3;
