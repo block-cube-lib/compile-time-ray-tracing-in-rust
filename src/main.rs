@@ -42,6 +42,7 @@ const fn ray_trace() -> [Color; PIXEL_COUNT] {
     let mut pixel_colors = [Color::ZERO; PIXEL_COUNT];
     let mut i = 0;
     let mut j = (IMAGE_HEIGHT - 1) as i32;
+    let mut pixel_index = 0;
     // forが使えないのでwhileで代用
     while 0 <= j {
         while i < IMAGE_WIDTH {
@@ -51,8 +52,9 @@ const fn ray_trace() -> [Color; PIXEL_COUNT] {
                 &origin,
                 &(lower_left_corner + u * horizontal + v * vertical - origin),
             );
-            pixel_colors[j as usize * IMAGE_WIDTH + i] = ray_color(&r);
+            pixel_colors[pixel_index] = ray_color(&r);
             i += 1;
+            pixel_index += 1;
         }
         i = 0;
         j -= 1;
