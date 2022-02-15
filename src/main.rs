@@ -20,6 +20,7 @@ const fn ray_trace() -> [(u8, u8, u8); PIXEL_COUNT] {
     let mut pixel_colors = [(0, 0, 0); PIXEL_COUNT];
     let mut i = 0;
     let mut j = (IMAGE_HEIGHT - 1) as i32;
+    let mut pixel_index = 0;
     // forが使えないのでwhileで代用
     while 0 <= j {
         while i < IMAGE_WIDTH {
@@ -31,8 +32,9 @@ const fn ray_trace() -> [(u8, u8, u8); PIXEL_COUNT] {
                 (g * 255.999) as u8,
                 (b * 255.999) as u8,
             );
-            pixel_colors[j as usize * IMAGE_WIDTH + i] = (r, g, b);
+            pixel_colors[pixel_index] = (r, g, b);
             i += 1;
+            pixel_index += 1;
         }
         i = 0;
         j -= 1;
