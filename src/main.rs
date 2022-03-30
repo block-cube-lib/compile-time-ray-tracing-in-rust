@@ -12,24 +12,9 @@ const IMAGE_WIDTH: usize = 400;
 const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
 const PIXEL_COUNT: usize = IMAGE_WIDTH * IMAGE_HEIGHT;
 
-const fn hit_sphere(center: &Point3, radius: f64, r: &Ray) -> f64 {
-    let oc = r.origin() - center.clone();
-    let a = dot(&r.direction(), &r.direction());
-    let b = 2.0 * dot(&oc, &r.direction());
-    let c = dot(&oc, &oc) - radius * radius;
-    let discriminant = b * b - 4.0 * a * c;
-    if discriminant < 0.0 {
-        -1.0
-    } else {
-        (-b - sqrt(discriminant)) / (2.0 * a)
-    }
-}
-
-const fn ray_color(ray: &Ray) -> Color {
-    let t = hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, &ray);
-    if t > 0.0 {
-        let n = unit_vector(&(ray.at(t) - Vec3::new(0.0, 0.0, -1.0)));
-        return 0.5 * Color::new(n.x + 1.0, n.y + 1.0, n.z + 1.0);
+const fn ray_color<const N: usize>(ray: &Ray, world: &HittableList<N>) -> Color {
+    if let Some(rec) = world.hit(&ray, 0.0, std::f64::INFINITY) {
+        return 0.5 * (rec.normal + Color::new(1.0, 1.0, 1.0));
     }
     let unit_direction = unit_vector(&ray.direction());
     let t = 0.5 * (unit_direction.y + 1.0);
@@ -57,6 +42,16 @@ const fn ray_trace() -> [Color; PIXEL_COUNT] {
     let lower_left_corner =
         origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
 
+    let mut world: HittableList<2> = HittableList::<2>::new();
+    world.add(Hittable::Sphere(Sphere::new(
+        Vec3::new(0.0, 0.0, -1.0),
+        0.5,
+    )));
+    world.add(Hittable::Sphere(Sphere::new(
+        Vec3::new(0.0, -100.5, -1.0),
+        100.0,
+    )));
+
     let mut pixel_colors = [Color::ZERO; PIXEL_COUNT];
     let mut i = 0;
     let mut j = (IMAGE_HEIGHT - 1) as i32;
@@ -70,7 +65,7 @@ const fn ray_trace() -> [Color; PIXEL_COUNT] {
                 &origin,
                 &(lower_left_corner + u * horizontal + v * vertical - origin),
             );
-            pixel_colors[pixel_index] = ray_color(&r);
+            pixel_colors[pixel_index] = ray_color(&r, &world);
             i += 1;
             pixel_index += 1;
         }
