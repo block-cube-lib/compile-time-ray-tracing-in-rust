@@ -2,9 +2,13 @@
 name = "ray-tracing-in-one-weekend-compile-time"
 version = "0.1.0"
 edition = "2021"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 anyhow = "1.0.52"
 image = "0.23.14"
+
+[build-dependencies]
+anyhow = "1.0.52"

@@ -3,17 +3,21 @@
 #![feature(const_mut_refs)]
 #![feature(const_eval_limit)]
 #![const_eval_limit = "0"]
+pub mod camera;
 pub mod hit_record;
 pub mod hittable;
 pub mod hittable_list;
+pub mod rand;
 pub mod ray;
 pub mod sphere;
 pub mod util;
 pub mod vec3;
 
+pub use camera::*;
 pub use hit_record::*;
 pub use hittable::*;
 pub use hittable_list::*;
+pub use rand::*;
 pub use ray::*;
 pub use sphere::*;
 pub use util::*;

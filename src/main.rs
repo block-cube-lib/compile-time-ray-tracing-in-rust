@@ -10,6 +10,7 @@ use ray_tracing_in_one_weekend_compile_time::*;
 const ASPECT_RATIO: f64 = 16.0 / 9.0;
 const IMAGE_WIDTH: usize = 400;
 const IMAGE_HEIGHT: usize = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as usize;
+const SAMPLES_PER_PIXEL: usize = 100;
 const PIXEL_COUNT: usize = IMAGE_WIDTH * IMAGE_HEIGHT;
 
 const fn ray_color<const N: usize>(ray: &Ray, world: &HittableList<N>) -> Color {
@@ -32,16 +33,6 @@ fn main() -> anyhow::Result<()> {
 }
 
 const fn ray_trace() -> [Color; PIXEL_COUNT] {
-    let viewport_height = 2.0;
-    let viewport_width = viewport_height * ASPECT_RATIO;
-    let focal_length = 1.0;
-
-    let origin = Point3::ZERO;
-    let horizontal = Vec3::new(viewport_width, 0.0, 0.0);
-    let vertical = Vec3::new(0.0, viewport_height, 0.0);
-    let lower_left_corner =
-        origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
-
     let mut world: HittableList<2> = HittableList::<2>::new();
     world.add(Hittable::Sphere(Sphere::new(
         Vec3::new(0.0, 0.0, -1.0),
@@ -52,20 +43,27 @@ const fn ray_trace() -> [Color; PIXEL_COUNT] {
         100.0,
     )));
 
+    let cam = Camera::new();
+
+    let mut rng = Xorshift::new(include!("rand_seed.txt"));
     let mut pixel_colors = [Color::ZERO; PIXEL_COUNT];
     let mut i = 0;
     let mut j = (IMAGE_HEIGHT - 1) as i32;
     let mut pixel_index = 0;
+    let scale = 1.0 / SAMPLES_PER_PIXEL as f64;
     // forが使えないのでwhileで代用
     while 0 <= j {
         while i < IMAGE_WIDTH {
-            let u = (i as f64) / (IMAGE_WIDTH - 1) as f64;
-            let v = (j as f64) / (IMAGE_HEIGHT - 1) as f64;
-            let r = Ray::new(
-                &origin,
-                &(lower_left_corner + u * horizontal + v * vertical - origin),
-            );
-            pixel_colors[pixel_index] = ray_color(&r, &world);
+            let mut s = 0;
+            let mut pixel_color = Color::ZERO;
+            while s < SAMPLES_PER_PIXEL {
+                let u = (i as f64 + rng.gen_f64()) / (IMAGE_WIDTH - 1) as f64;
+                let v = (j as f64 + rng.gen_f64()) / (IMAGE_HEIGHT - 1) as f64;
+                let r = cam.get_ray(u, v);
+                pixel_color = pixel_color + ray_color(&r, &world) * scale;
+                s += 1;
+            }
+            pixel_colors[pixel_index] = pixel_color;
             i += 1;
             pixel_index += 1;
         }

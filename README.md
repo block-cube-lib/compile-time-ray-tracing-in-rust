@@ -8,5 +8,6 @@ Rustでコンパイル時レイトレーシングを行うリポジトリです�
 ![Image1](./output/image1.png)  
 ![Image2](./output/image2.png)
 ![Image3](./output/image3.png)  
-![Image4](./output/image4.png)
-![Image4](./output/image5.png)  
+![Image4](./output/image4.png)  
+![Image5](./output/image5.png)
+![Image6](./output/image6.png)  
